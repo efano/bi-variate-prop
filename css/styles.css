@@ -1,0 +1,40 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: whitesmoke;
+  font-family: Lato, sans-serif;
+  color: #0D0000;
+}
+
+header {
+  padding: 6px 10%;
+}
+
+#map {
+  position: relative;
+  height: 100vh;
+  width: 100hw;
+}
+
+p {
+  font-size: 1em;
+  color: #001323;
+}
+
+.text-title {
+  font-weight: 400;
+  font-size: 3.25em;
+  white-space: nowrap;
+  color: whitesmoke;
+}
+
+.text-main {
+  font-size: 1em;
+  color: whitesmoke;
+  min-width: 200px;
+  display: inline-block;
+}
+
+.leaflet-control-layers-expanded {
+  background-color: whitesmoke;
+}

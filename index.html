@@ -1,92 +1,61 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <meta charset=utf-8 />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>US Power Plants</title>
-    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
     <script src="./js/leaflet.js"></script>
     <link rel="stylesheet" href="./css/leaflet.css" />
-    <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: whitesmoke;
-            font-family: Lato, sans-serif;
-            color: #0D0000;
-        }
-        
-        header {
-            padding: 6px 10%;
-        }
-        
-        #map {
-            position: relative;
-            height: 100vh;
-            width: 100hw;
-        }
-        
-        p {
-            font-size: 1em;
-            color: #001323;
-        }
-        
-        .text-title {
-            font-weight: 400;
-            font-size: 3.25em;
-            white-space: nowrap;
-            color: whitesmoke;
-        }
-        
-        .text-main {
-            font-size: 1em;
-            color: whitesmoke;
-            min-width: 200px;
-            display: inline-block;
-        }
-    </style>
+    <link rel="stylesheet" href="./css/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    
 </head>
 
 <body>
-    <div id='map'></div>
+    <div id="map"></div>
     <script src="power-plants.js"></script>
     <script>
         var map = L.map('map', {
-            center: [40, -104]
-            , zoom: 4
-            , minZoom: 4
-        , });
-        var tiles = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base//MapServer/tile/{z}/{y}/{x}', {
-            attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
+            center: [40, -104],
+            zoom: 4,
+            minZoom: 4,
         });
+        var tiles = L.tileLayer(
+            'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base//MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
+            });
         tiles.addTo(map);
         //
         // Spotlight circle
         //
         var radiusCircle = L.circle([0, 0], 500000, {
-            fillColor: 'white'
-            , fillOpacity: .1
-            , color: 'white'
-            , opacity: .3
-            , stroke: false
-            , weight: 3
-        , }).addTo(map);
+            fillColor: 'white',
+            fillOpacity: .1,
+            color: 'white',
+            opacity: .3,
+            stroke: false,
+            weight: 3,
+        }).addTo(map);
         //
         // Creates map layers
         //
         var layerInfo = {
             nuclearLayer: {
-                source: "Nuclear"
-                , color: 'crimson'
-            }
-            , hydroLayer: {
-                source: "Hydro"
-                , color: '#00B1A6'
-            }
-            , solarLayer: {
-                source: "Solar"
-                , color: 'orange'
+                source: "Nuclear",
+                color: 'crimson'
+            },
+            hydroLayer: {
+                source: "Hydro",
+                color: '#00B1A6'
+            },
+            solarLayer: {
+                source: "Solar",
+                color: 'orange'
             }
         };
         //
@@ -95,17 +64,17 @@
             geoJsonLayers[layer] = L.geoJson(plants, {
                 pointToLayer: function (feature, latlng) {
                     return L.circleMarker(latlng, layerInfo)
-                }
-                , filter: function (feature) {
+                },
+                filter: function (feature) {
                     if (feature.properties.fuel_source[layerInfo[layer].source]) {
                         return feature;
                     }
-                }
-                , style: function (feature) {
+                },
+                style: function (feature) {
                     return {
-                        color: layerInfo[layer].color
-                        , fillColor: layerInfo[layer].color
-                        , radius: getRadius(feature.properties.fuel_source[layerInfo[layer].source])
+                        color: layerInfo[layer].color,
+                        fillColor: layerInfo[layer].color,
+                        radius: getRadius(feature.properties.fuel_source[layerInfo[layer].source])
                     }
                 }
             }).addTo(map);
@@ -121,13 +90,13 @@
         // Legend
         //
         var sourcesLabels = {
-            "<b style='color:#00B1A6'>Hydro</b>": geoJsonLayers.hydroLayer
-            , "<b style='color:orange'>Solar</b>": geoJsonLayers.solarLayer
-            , "<b style='color:crimson'>Nuclear</b>": geoJsonLayers.nuclearLayer
+            "<b style='color:#00B1A6'>Hydro</b>": geoJsonLayers.hydroLayer,
+            "<b style='color:orange'>Solar</b>": geoJsonLayers.solarLayer,
+            "<b style='color:crimson'>Nuclear</b>": geoJsonLayers.nuclearLayer
         }
         L.control.layers(null, sourcesLabels, {
-            collapsed: false
-            , position: 'bottomright'
+            collapsed: false,
+            position: 'bottomright'
         }).addTo(map);
         //
         // Sends nuclear layer to bottom when toggled on
@@ -151,16 +120,19 @@
                     var distance = e.latlng.distanceTo(layer.getLatLng()) / 1000;
                     if (distance > 500) {
                         layer.setStyle({
-                            stroke: false
-                            , fill: false
+                            stroke: false,
+                            fill: false
                         });
-                    }
-                    else {
+                    } else {
                         layer.setStyle({
-                            stroke: true
-                            , fill: true
+                            stroke: true,
+                            fill: true
                         });
-                        layer.bindPopup("Name: <b>" + layer.feature.properties.plant_name + "</b><br>" + "Fuel Type: <b>" + layerInfo[l].source + "</b><br>" + "Output: <b>" + layer.feature.properties.capacity_mw.toLocaleString() + " MW</b><br><br>" + "This location is <b>" + distance.toLocaleString() + " km</b><br> from the click point.");
+                        layer.bindPopup("Name: <b>" + layer.feature.properties.plant_name + "</b><br>" +
+                            "Fuel Type: <b>" + layerInfo[l].source + "</b><br>" + "Output: <b>" +
+                            layer.feature.properties.capacity_mw.toLocaleString() +
+                            " MW</b><br><br>" + "This location is <b>" + distance.toLocaleString() +
+                            " km</b><br> from the click point.");
                     }
                 });
             }
@@ -171,10 +143,10 @@
         var textLatLng = [55, -148];
         var myTextLabel = L.marker(textLatLng, {
             icon: L.divIcon({
-                className: 'text-title'
-                , html: 'U.S. Nuclear, Hydroelectric and Solar Power Plants'
-            })
-            , zIndexOffset: 1000
+                className: 'text-title',
+                html: 'U.S. Nuclear, Hydroelectric and Solar Power Plants'
+            }),
+            zIndexOffset: 1000
         }).addTo(map);
         //
         // Main text
@@ -182,10 +154,10 @@
         var textLatLng = [49.5, -148];
         var myTextLabel = L.marker(textLatLng, {
             icon: L.divIcon({
-                className: 'text-main'
-                , html: 'This interactive bivariate web map displays nuclear, hydroelectric, and solar power plants within the United States, symbolized by fuel source and energy output. The proportional circle symbols indicate the amount of power produced from one fuel source. The user should first click any blank area on the map to visually filter power plants within 500 kilometers from the click location, then click on a power plant location circle to display its attributes and distance from the original click point. <br><br>Data Source: <a href="  https://www.eia.gov/electricity/data/eia923/" style="color: orange">U.S. Energy Information Administration</a>. Map authored by Lis Fano and created on 09/06/2016 for New Maps Plus MAP672.'
-            })
-            , zIndexOffset: 1000
+                className: 'text-main',
+                html: 'This interactive bivariate web map displays nuclear, hydroelectric, and solar power plants within the United States, symbolized by fuel source and energy output. The proportional circle symbols indicate the amount of power produced from one fuel source. The user should first click any blank area on the map to visually filter power plants within 500 kilometers from the click location, then click on a power plant location circle to display its attributes and distance from the original click point. <br><br>Data Source: <a href="  https://www.eia.gov/electricity/data/eia923/" style="color: orange">U.S. Energy Information Administration</a>. Map authored by Lis Fano and created on 09/06/2016 for New Maps Plus MAP672.'
+            }),
+            zIndexOffset: 1000
         }).addTo(map);
     </script>
 </body>

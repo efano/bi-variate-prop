@@ -1,4 +1,4 @@
-# US Power Plants
+# U.S. Power Plants
 
 This interactive bivariate web map displays nuclear, hydroelectric, and solar power plants within the
 United States, symbolized by fuel source and energy output. The proportional circle symbols indicate

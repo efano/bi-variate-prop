@@ -6,6 +6,6 @@ the amount of power produced from one fuel source. The user can click any blank 
 visually filter power plants within 500 kilometers from the click location, then click on a power
 plant location circle to display its attributes and distance from the original click point.
   
-Languages: JavaScript, HTML, CSS/
-Libraries: Leaflet/
+Languages: JavaScript, HTML, CSS\
+Libraries: Leaflet\
 Data Sources: [U.S. Energy Information Administration](https://www.eia.gov/electricity/data/eia923/)

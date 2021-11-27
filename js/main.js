@@ -17,7 +17,7 @@
           color: 'white',
           opacity: .3,
           stroke: false,
-          weight: 3,
+          weight: 1,
         }).addTo(map);
         //
         // Creates map layers
@@ -51,6 +51,7 @@
             style: function (feature) {
               return {
                 color: layerInfo[layer].color,
+                weight: 1,
                 fillColor: layerInfo[layer].color,
                 radius: getRadius(feature.properties.fuel_source[layerInfo[layer].source])
               }
@@ -62,7 +63,7 @@
         //
         function getRadius(val) {
           var radius = Math.sqrt(val / Math.PI);
-          return radius * .8;
+          return radius * .5;
         }
         //
         // Legend
